@@ -22,7 +22,17 @@
                 super('sponser');
             }
             create() {
-                this.add.text(10,10,"Sponsered by APR")
+                this.add.text(10,10,"Sponsered by APR");
+                let blueCirc = this.add.circle(245,302,100,0x000fff)
+                this.add.tween({
+                    targets: blueCirc,
+                    scale: {from: 0, to: 2},
+                    duration: 1500,
+                });
+                this.time.delayedCall(2000, () => {
+                    this.cameras.main.fadeOut(1500, 0,0,0);
+                })
+                this.input.on('pointerdown',() => this.scene.start('intro'));
             }
         }
 
