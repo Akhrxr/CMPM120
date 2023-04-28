@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMPM120 DK</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.min.js" integrity="sha512-YQL0GVx/Too3vZjBl9plePRIYsRnd1s8N6QOvXPdZ+JMH2mtRTLQXGUDGjNW6zr1HUgcOIury67IvWe91oeEwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        class Intro extends Phaser.Scene {
+            constructor() {
+                super('intro');
+            }
+            create() {
+                this.add.text(10,10,"Welcome DK")
+                this.input.on('pointerdown',() => this.scene.start('sponser'));
+            }
+        }
+
+        class Sponser extends Phaser.Scene{
+            constructor() {
+                super('sponser');
+            }
+            create() {
+                this.add.text(10,10,"Sponsered by APR")
+            }
+        }
+
+        new Phaser.Game({
+            width: 640, 
+            height: 480,
+            scene: [Intro,Sponser],
+        });
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
