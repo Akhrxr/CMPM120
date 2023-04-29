@@ -11,8 +11,38 @@
             constructor() {
                 super('intro');
             }
+            preload() {
+                this.load.image('350', 'assets/350.png');
+                this.load.audio('skrrt', 'assets/Car Skid Sound Effect For Download.wav');
+
+            }
             create() {
-                this.add.text(10,10,"Welcome DK")
+                //skrt sound
+                this.skrt = this.sound.add('skrrt');
+                var skrtConfig = {
+                    rate:0.05,
+                    detune: 20,
+                }
+                this.skrt.play();
+                //350z sliding by
+                this.zcar = this.add.sprite(-150, 150, '350');
+                this.zcar.setScale(.25);
+                this.tweens.add({
+                    targets: this.zcar,
+                    x: 750,
+                    y: 200,
+                    duration: 2000,
+                    ease: 'Linear',
+                });
+                //welcome txt
+                this.add.text(300,300,"Welcome DK\n   it is time...",{font: "40px ComicSans", color: "#000000",});
+                this.time.delayedCall(2000, () => {
+                    this.cameras.main.fadeOut(2000, 255,255,255);
+                    this.time.delayedCall(2500, () => {
+                        this.scene.start('sponser');
+                    })
+                })
+                //if wanted to skip scene
                 this.input.on('pointerdown',() => this.scene.start('sponser'));
             }
         }
@@ -21,25 +51,82 @@
             constructor() {
                 super('sponser');
             }
+            preload () {
+                this.load.image('sponseredby', 'assets/sponseredby.png');
+                this.load.image('APR', 'assets/apr.png');
+                console.log("preload done");
+            }
             create() {
-                this.add.text(10,10,"Sponsered by APR");
-                let blueCirc = this.add.circle(245,302,100,0x000fff)
+                this.cameras.main.fadeIn(1000, 255, 255, 255)
+                this.sponsimg = this.add.image(300,200,'sponseredby');
+                this.sponsimg.setScale(0.5)
+                this.aprimg = this.add.image(300,350,'APR');
+                this.aprimg.setScale(0.5)
+                let blueCirc = this.add.circle(580,580,50,0x033fff)
                 this.add.tween({
                     targets: blueCirc,
-                    scale: {from: 0, to: 2},
+                    scale: {from: 0, to: 1},
                     duration: 1500,
                 });
                 this.time.delayedCall(2000, () => {
-                    this.cameras.main.fadeOut(1500, 0,0,0);
+                    this.cameras.main.fadeOut(1500, 255,255,255);
+                    this.time.delayedCall(2500, () => {
+                        this.scene.start('scene1');
+                    })
                 })
-                this.input.on('pointerdown',() => this.scene.start('intro'));
+                this.input.on('pointerdown',() => this.scene.start('scene1'));
+            }
+            
+        }
+
+        class Scene1 extends Phaser.Scene{
+            constructor() {
+                super('scene1');
+            }
+            create() {
+                this.cameras.main.fadeIn(1000, 255, 255, 255)
+                this.add.text(300,300,"Not really",{font: "40px ComicSans", color: "#0ff000",});
+                this.time.delayedCall(2000, () => {
+                    this.cameras.main.fadeOut(1500, 255,255,255);
+                    this.time.delayedCall(2500, () => {
+                        this.scene.start('scene2');
+                    })
+                })
+                this.input.on('pointerdown',() => this.scene.start('scene2'));
+            }
+
+        }
+        class Scene2 extends Phaser.Scene{
+            constructor() {
+                super('scene2');
+            }
+            preload() {
+                this.load.spritesheet('Drift', 'assets/drifter.png', {
+                    frameWidth: 300,
+                    frameHeight: 300,
+                });
+            }
+            create() {
+                this.cameras.main.fadeIn(1000, 255, 255, 255)
+                this.anims.create({
+                    key: "Driftanim",
+                    frames: this.anims.generateFrameNumbers("Drift"),
+                    frameRate: 10,
+                    repeat:-1,
+                });
+                this.bg = this.add.sprite(300,300,'Driftanim');
+                this.bg.setScale(2.5);
+            }
+            update() {
+                this.bg.play("Driftanim",true);
             }
         }
 
         new Phaser.Game({
-            width: 640, 
-            height: 480,
-            scene: [Intro,Sponser],
+            width: 600, 
+            height: 600,
+            scene: [Scene2,Intro,Sponser,Scene1,],
+            backgroundColor: 0xffffff
         });
     </script>
 </head>
